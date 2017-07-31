@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.sm1pro.grpc";
+option java_outer_classname = "Grpc";
+option objc_class_prefix = "GRPC";
+
+package sm1pro;
+
+// The greeting service definition.
+service Greeter {
+  // Sends a greeting
+  rpc SayHello (SaveRequest) returns (SaveReply) {}
+}
+
+// The request message containing the user's name.
+message SaveRequest {
+  string sensor_name = 1;
+  string data_type = 2;
+  string data_value = 3;
+}
+
+// The response message containing the greetings
+message SaveReply {
+  string message = 1;
+}
