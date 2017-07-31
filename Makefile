@@ -64,13 +64,10 @@ sm1pro_server: sm1pro.pb.o sm1pro.grpc.pb.o sm1pro_server.o
 .PRECIOUS: %.grpc.pb.cc
 %.grpc.pb.cc: %.proto
 	$(PROTOC) -I $(PROTOS_PATH) --grpc_out=. --plugin=protoc-gen-grpc=$(GRPC_CPP_PLUGIN_PATH) $<
-	$(PROTOC) -I $(PROTOS_PATH) --grpc_out=. --plugin=protoc-gen-grpc=$(GRPC_PYTHON_PLUGIN_PATH) $<
 
 .PRECIOUS: %.pb.cc
 %.pb.cc: %.proto
 	$(PROTOC) -I $(PROTOS_PATH) --cpp_out=. $<
-	$(PROTOC) -I $(PROTOS_PATH) --python_out=. $<
 	
 clean:
 	rm -f *.o *.pb.cc *.pb.h bin/sm1mfc_client bin/sm1pro_server
-
