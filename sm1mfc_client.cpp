@@ -37,6 +37,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include <unistd.h>
 
 #include <grpc++/grpc++.h>
 
@@ -56,11 +57,11 @@ public:
 
     // Assembles the client's payload, sends it and presents the response back
     // from the server.
-    std::string SayHello(const std::string& user) {
+    std::string SayHello(const std::string& sensor_name) {
         
         // Data we are sending to the server.
         SaveRequest request;
-        request.set_sensor_name("01");
+        request.set_sensor_name(sensor_name);
         request.set_sensor_type("MFC");
         request.set_data_type("current_mass_flow_rate");
         request.set_raw_value("0.15");
@@ -92,15 +93,27 @@ private:
 };
 
 int main(int argc, char** argv) {
-    // Instantiate the client. It requires a channel, out of which the actual RPCs
-    // are created. This channel models a connection to an endpoint (in this case,
-    // localhost at port 50051). We indicate that the channel isn't authenticated
-    // (use of InsecureChannelCredentials()).
-    GreeterClient greeter(grpc::CreateChannel(
-            "localhost:50051", grpc::InsecureChannelCredentials()));
-    std::string user("world");
-    std::string reply = greeter.SayHello(user);
-    std::cout << "Greeter received: " << reply << std::endl;
 
+    std::vector<std::string> sensorList = {"01", "02"};
+
+    while (true)
+    {
+        try{
+            for (auto it=sensorList.cbegin(), end=sensorList.cend(); it!=end; ++it)
+            {
+                GreeterClient greeter(grpc::CreateChannel(
+                        "localhost:50051", grpc::InsecureChannelCredentials()));
+                std::string sensor_name(*it);
+                std::string reply = greeter.SayHello(sensor_name);
+                std::cout << "Greeter received: " << reply << std::endl;
+            }
+            sleep(1);
+        }
+        catch(...)
+        {
+            std::cerr << "Unknown catched error.." << std::endl;
+        }
+    }
+    
     return 0;
 }
