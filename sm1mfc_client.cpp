@@ -57,11 +57,14 @@ public:
     // Assembles the client's payload, sends it and presents the response back
     // from the server.
     std::string SayHello(const std::string& user) {
+        
         // Data we are sending to the server.
         SaveRequest request;
-        request.set_sensor_name(user);
+        request.set_sensor_name("01");
+        request.set_sensor_type("MFC");
         request.set_data_type("current_mass_flow_rate");
-        request.set_data_value("0.15");
+        request.set_raw_value("0.15");
+        request.set_timestamp("yyyy-mm-ddThh:mm:ss.mmmZ");
 
         // Container for the data we expect from the server.
         SaveReply reply;

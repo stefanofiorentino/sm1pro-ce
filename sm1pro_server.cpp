@@ -22,9 +22,11 @@ class GreeterServiceImpl final : public Greeter::Service {
     Status SayHello(ServerContext* context, const SaveRequest* request,
                     SaveReply* reply) override {
         std::string messageToSave =
-                request->sensor_name() +" "
-                + request->data_type() +" "
-                + request->data_value();
+                request->sensor_type() + " "
+                + request->sensor_name() + " "
+                + request->data_type() + " "
+                + request->raw_value()+" "
+                + request->timestamp();
         reply->set_message(messageToSave);
         return Status::OK;
     }
