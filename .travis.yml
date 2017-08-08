@@ -1,0 +1,34 @@
+# Use C++ build environment.
+language: cpp
+
+# Protobuf requires g++ (see https://github.com/google/protobuf/blob/master/src/README.md)
+compiler:
+    - gcc-6
+
+# Cache dependencies to speed up the build.
+cache:
+    directories:
+        - ${TRAVIS_BUILD_DIR}/deps/protobuf
+
+# Handle dependencies in separate directory.
+before_install:
+    - DEPS_DIR="${TRAVIS_BUILD_DIR}/deps"
+    - mkdir -p "${DEPS_DIR}"
+    - cd "${DEPS_DIR}"
+
+install:
+    # Install a recent version of the Protobuf
+    - |
+        PROTOBUF_URL="https://github.com/google/protobuf/releases/download/v3.2.0/protobuf-cpp-3.2.0.tar.gz"
+        if [ ! -f ${DEPS_DIR}/protobuf/install/bin/protoc ] ; then mkdir -p protobuf ; travis_retry wget --no-check-certificate --quiet -O - ${PROTOBUF_URL} | tar --strip-components=1 -xz -C protobuf ; cd protobuf ; ./configure --prefix=${DEPS_DIR}/protobuf/install ; make ; make install ; fi
+        export PATH=${DEPS_DIR}/protobuf/install/bin:${PATH}
+
+# Change directory back to default build directory.
+before_script:
+    - cd "${TRAVIS_BUILD_DIR}"
+
+# Run the build script.
+script:
+    - mkdir -p bin
+    - make clean
+    - make
