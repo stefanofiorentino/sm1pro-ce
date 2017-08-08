@@ -32,14 +32,14 @@
 HOST_SYSTEM = $(shell uname | cut -f 1 -d_)
 SYSTEM ?= $(HOST_SYSTEM)
 CXX = g++
-CPPFLAGS += -I/usr/local/include -pthread
+CPPFLAGS += -I/usr/local/include -I${DEPS_DIR}/protobuf/install/include -pthread
 CXXFLAGS += -std=c++11
 ifeq ($(SYSTEM),Darwin)
-LDFLAGS += -L/usr/local/lib `pkg-config --libs grpc++ grpc`       \
+LDFLAGS += -L/usr/local/lib -L${DEPS_DIR}/protobuf/install/lib `pkg-config --libs grpc++ grpc`       \
            -lgrpc++_reflection \
            -lprotobuf -lpthread -ldl
 else
-LDFLAGS += -L/usr/local/lib `pkg-config --libs grpc++ grpc`       \
+LDFLAGS += -L/usr/local/lib -L${DEPS_DIR}/protobuf/install/lib `pkg-config --libs grpc++ grpc`       \
            -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed \
            -lprotobuf -lpthread -ldl
 endif
