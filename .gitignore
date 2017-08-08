@@ -30,3 +30,13 @@
 *.exe
 *.out
 *.app
+sm1pro.grpc.pb.cc
+sm1pro.pb.cc
+sm1pro.grpc.pb.h
+sm1pro.pb.h
+./bin
+./.vscode
+./.vscode/launch.json
+./.vscode/settings.json
+./bin/sm1mfc_client
+./bin/sm1pro_server
