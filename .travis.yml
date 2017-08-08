@@ -3,7 +3,7 @@ language: cpp
 
 # Protobuf requires g++ (see https://github.com/google/protobuf/blob/master/src/README.md)
 compiler:
-    - gcc-6
+    - gcc
 
 # Cache dependencies to speed up the build.
 cache:
