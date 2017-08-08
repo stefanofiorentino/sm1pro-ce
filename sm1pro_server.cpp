@@ -15,17 +15,17 @@ using grpc::ServerContext;
 using grpc::Status;
 using sm1pro::SaveRequest;
 using sm1pro::SaveReply;
-using sm1pro::Greeter;
+using sm1pro::SmartMeter1;
 
 // Logic and data behind the server's behavior.
-class GreeterServiceImpl final : public Greeter::Service {
+class SmartMeter1ServiceImpl final : public SmartMeter1::Service {
     Status SayHello(ServerContext* context, const SaveRequest* request,
                     SaveReply* reply) override {
         std::string messageToSave =
                 request->sensor_type() + " "
                 + request->sensor_name() + " "
                 + request->data_type() + " "
-                + request->raw_value()+" "
+                + request->raw_value()+ " "
                 + request->timestamp();
         reply->set_message(messageToSave);
         return Status::OK;
@@ -34,14 +34,16 @@ class GreeterServiceImpl final : public Greeter::Service {
 
 void RunServer() {
     std::string server_address("0.0.0.0:50051");
-    GreeterServiceImpl service;
+    SmartMeter1ServiceImpl service;
 
     ServerBuilder builder;
     // Listen on the given address without any authentication mechanism.
     builder.AddListeningPort(server_address, grpc::InsecureServerCredentials());
+
     // Register "service" as the instance through which we'll communicate with
     // clients. In this case it corresponds to an *synchronous* service.
     builder.RegisterService(&service);
+
     // Finally assemble the server.
     std::unique_ptr<Server> server(builder.BuildAndStart());
     std::cout << "Server listening on " << server_address << std::endl;

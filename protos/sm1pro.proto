@@ -8,8 +8,7 @@ option objc_class_prefix = "GRPC";
 package sm1pro;
 
 // The greeting service definition.
-service Greeter {
-  // Sends a greeting
+service SmartMeter1 {
   rpc SayHello (SaveRequest) returns (SaveReply) {}
 }
 
