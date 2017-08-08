@@ -31,7 +31,7 @@
 
 HOST_SYSTEM = $(shell uname | cut -f 1 -d_)
 SYSTEM ?= $(HOST_SYSTEM)
-CXX = g++
+CXX = g++-6
 CPPFLAGS += -I/usr/local/include -pthread
 CXXFLAGS += -std=c++11
 ifeq ($(SYSTEM),Darwin)
@@ -56,10 +56,10 @@ vpath %.proto $(PROTOS_PATH)
 all: sm1mfc_client sm1pro_server
 
 sm1mfc_client: sm1pro.pb.o sm1pro.grpc.pb.o sm1mfc_client.o
-	$(CXX) $^ $(LDFLAGS) -o bin/$@
+	$(CXX) $^ $(LDFLAGS) -g -o bin/$@
 
 sm1pro_server: sm1pro.pb.o sm1pro.grpc.pb.o sm1pro_server.o
-	$(CXX) $^ $(LDFLAGS) -o bin/$@
+	$(CXX) $^ $(LDFLAGS) -g -o bin/$@
 
 .PRECIOUS: %.grpc.pb.cc
 %.grpc.pb.cc: %.proto
