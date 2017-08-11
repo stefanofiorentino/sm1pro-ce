@@ -26,6 +26,7 @@ install:
 # Change directory back to default build directory.
 before_script:
     - cd "${TRAVIS_BUILD_DIR}"
+    - chmod +x ${DEPS_DIR}/protobuf/install/bin/protoc
 
 # Run the build script.
 script:
