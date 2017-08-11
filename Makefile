@@ -53,6 +53,8 @@ PROTOS_PATH = ./protos
 
 vpath %.proto $(PROTOS_PATH)
 
+print-%  : ; @echo $* = $($*)
+
 all: sm1mfc_client sm1pro_server
 
 sm1mfc_client: sm1pro.pb.o sm1pro.grpc.pb.o sm1mfc_client.o

@@ -26,10 +26,11 @@ install:
 # Change directory back to default build directory.
 before_script:
     - cd "${TRAVIS_BUILD_DIR}"
-    - chmod +x ${DEPS_DIR}/protobuf/install/bin/protoc
 
 # Run the build script.
 script:
     - mkdir -p bin
     - make clean
+    - chmod +x ${DEPS_DIR}/protobuf/install/bin/protoc
+    - make print-GRPC_CPP_PLUGIN_PATH
     - make
