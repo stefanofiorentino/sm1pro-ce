@@ -36,3 +36,4 @@ sm1pro.grpc.pb.h
 sm1pro.pb.h
 bin
 .vscode/
+deps
