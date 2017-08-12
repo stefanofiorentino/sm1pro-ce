@@ -20,8 +20,14 @@ install:
     # Install a recent version of the Protobuf
     - |
         PROTOBUF_URL="https://github.com/google/protobuf/releases/download/v3.2.0/protobuf-cpp-3.2.0.tar.gz"
-        if [ ! -f ${DEPS_DIR}/protobuf/install/bin/protoc ] ; then mkdir -p protobuf ; travis_retry wget --no-check-certificate --quiet -O - ${PROTOBUF_URL} | tar --strip-components=1 -xz -C protobuf ; cd protobuf ; ./configure --prefix=${DEPS_DIR}/protobuf/install ; make ; make install ; fi
+        if [ ! -f ${DEPS_DIR}/protobuf/install/bin/protoc ] ; then mkdir -p protobuf ; travis_retry wget --no-check-certificate --quiet -O - ${PROTOBUF_URL} | tar --strip-components=1 -xz -C protobuf ; cd protobuf ; ./configure ./--prefix=${DEPS_DIR}/protobuf/install ; make ; make install ; fi
         export PATH=${DEPS_DIR}/protobuf/install/bin:${PATH}
+    - |
+        git clone -b $(curl -L https://grpc.io/release) https://github.com/grpc/grpc
+        cd grpc
+        git submodule update --init
+        make
+        make install
 
 # Change directory back to default build directory.
 before_script:
@@ -31,6 +37,5 @@ before_script:
 script:
     - mkdir -p bin
     - make clean
-    - chmod +x ${DEPS_DIR}/protobuf/install/bin/protoc
     - make print-GRPC_CPP_PLUGIN_PATH
     - make
