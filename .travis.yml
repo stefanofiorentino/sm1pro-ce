@@ -40,5 +40,6 @@ script:
     - make clean
     - export LD_LIBRARY_PATH=${DEPS_DIR}/grpc/libs/opt:$LD_LIBRARY_PATH
     - export PATH=${DEPS_DIR}/grpc/bins/opt:$PATH
+    - export PKG_CONFIG_PATH=${DEPS_DIR}/grpc/libs/opt/pkgconfig:$PKG_CONFIG_PATH
     - make print-GRPC_CPP_PLUGIN_PATH
     - make
