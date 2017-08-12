@@ -36,11 +36,13 @@ CPPFLAGS += -I/usr/local/include -I${TRAVIS_BUILD_DIR}/deps/protobuf/src -pthrea
 CXXFLAGS += -std=c++11
 ifeq ($(SYSTEM),Darwin)
 LDFLAGS += -L/usr/local/lib `pkg-config --libs grpc++ grpc`       \
+		   -L${DEPS_DIR}/grpc/install/bin \
            -lgrpc++_reflection \
            -lprotobuf -lpthread -ldl
 else
 LDFLAGS += -L/usr/local/lib `pkg-config --libs grpc++ grpc`       \
-           -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed \
+           -L${DEPS_DIR}/grpc/install/bin \
+		   -Wl,--no-as-needed -lgrpc++_reflection -Wl,--as-needed \
            -lprotobuf -lpthread -ldl
 endif
 PROTOC = protoc
