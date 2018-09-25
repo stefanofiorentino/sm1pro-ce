@@ -21,8 +21,6 @@ sensor_info_cursor.execute("""
         (select `vtmp`.`data_type` from `data_type` `vtmp` where `vtmp`.`no` = `pm`.`data_type`) AS `data_type` 
     FROM 
         DataM1 pm
-    WHERE 
-        timestamp IN (SELECT no FROM timestamp WHERE timestamp >= NOW() - INTERVAL 1 DAY)
     """)
 sensor_list = {}
 for row in sensor_info_cursor.fetchall():
@@ -34,42 +32,44 @@ for row in sensor_info_cursor.fetchall():
     if sensor_name not in sensor_list[sensor_type]:
         sensor_list[sensor_type][sensor_name] = {}
     if data_type not in sensor_list[sensor_type][sensor_name]:
-        sensor_list[sensor_type][sensor_name][data_type]={}
-    print row[0], row[1], row[2]
+        sensor_list[sensor_type][sensor_name][data_type] = {}
 
 # Use all the SQL you like
-cur.execute("SELECT * FROM timestamp WHERE timestamp >= NOW() - INTERVAL 1 DAY")
+cur.execute("SELECT * FROM timestamp WHERE timestamp >= NOW() - INTERVAL 1 WEEK")
 
 # print all the first cell of all the rows
 for row in cur.fetchall():
     cur2.execute("""
         select 
-            (select `vtmp`.`timestamp` from `timestamp` `vtmp` where `vtmp`.`no` = `pm`.`timestamp`) AS `timestamp`,
+            `timestamp`,
             (select `vtmp`.`sensor_type` from `sensor_type` `vtmp` where `vtmp`.`no` = `pm`.`sensor_type`) AS `sensor_type`,
             (select `vtmp`.`sensor_name` from `sensor_name` `vtmp` where `vtmp`.`no` = `pm`.`sensor_name`) AS `sensor_name`,
             (select `vtmp`.`data_type` from `data_type` `vtmp` where `vtmp`.`no` = `pm`.`data_type`) AS `data_type`,
             `pm`.`massimo` AS `massimo`
         from `DataM1` `pm` where timestamp = %s""" % row[0]
-    )
+                 )
 
-    timestamp = {}
-    output_string = ("",),
+    output_string = ""
+    timestamp = str(row[1].isoformat())
     for row2 in cur2.fetchall():
-        timestamp = (row2[0].isoformat(),)
-        sensor_type = row2[1]
-        sensor_name = row2[2]
-        data_type = row2[3]
-        output_string = output_string + (sensor_type+", "+sensor_name+", "+data_type+", ",),
+        sensor_type = str(row2[1])
+        sensor_name = str(row2[2])
+        data_type = str(row2[3])
         value = str(row2[4])
         if sensor_type in sensor_list:
             if sensor_name in sensor_list[sensor_type]:
                 if data_type in sensor_list[sensor_type][sensor_name]:
-                    output_string = output_string + (value+", ", ),
-    print timestamp + (output_string,)
+                    output_string = output_string + ", " + sensor_type + ", " + \
+                        sensor_name + ", " + data_type + ", " + value
+                else:
+                    output_string = output_string + ", " + sensor_type + ", " + \
+                        sensor_name + ", " + data_type + ", \"\""
+            else:
+                output_string = output_string + ", " + sensor_type + ", " + \
+                    sensor_name + ", " + data_type + ", \"\""
+        else:
+            output_string = output_string + ", " + sensor_type + ", " + \
+                sensor_name + ", " + data_type + ", \"\""
+    print "\"" + timestamp + "\"" + output_string
 
-    # print timestamp+", ",
-    # for k in xrange(0, len(sensor_type)):
-    #     print sensor_type[k]+", "+sensor_name[k]+", "+data_type[k]+", "+value[k]+", ",
-    # print ""
-    
 db.close()
