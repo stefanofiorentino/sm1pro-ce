@@ -1,8 +1,9 @@
 #!/usr/bin/python
-# sudo apt-get install libmysqlclient-dev
-# sudo pip install MySQLdb
+## sudo apt-get install libmysqlclient-dev
+## sudo pip install MySQLdb
 import MySQLdb
 
+## sudo pip install flask
 # from flask import Flask
 # app = Flask(__name__)
 
